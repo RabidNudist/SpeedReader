@@ -169,14 +169,14 @@ int main(){
 	SetCurrentConsoleFontEx(console_handle, true, &console_info);
 
 	int input = 0;
-	printMenu();
-	cout << "Please select your choice: ";
-	cin >> input;
-	cout << endl;
 
 	startCounter();
 	while(input != -1){
 	
+		printMenu();
+		cout << "Please select your choice: ";
+		cin >> input;
+		cout << endl;
 		
 		switch(input){
 		case 1:
@@ -184,6 +184,7 @@ int main(){
 			getline(cin, user_input);
 			separate(user_input, words);
 			speedread(userp, words);
+			cout << endl << endl;
 			break;
 		case 2:
 			break;
@@ -191,10 +192,6 @@ int main(){
 			break;
 		}
 
-		printMenu();
-		cout << "Please select your choice: ";
-		cin >> input;
-		cout << endl;
 	};
 
 }
