@@ -74,7 +74,7 @@ void startCounter(){
 	LARGE_INTEGER li;
 	QueryPerformanceCounter(&li);
 
-	freq = float(li.QuadPart)/60000.0;
+	freq = float(li.QuadPart)/55000.0;
 	QueryPerformanceCounter(&li);
 	start = li.QuadPart;
 }
