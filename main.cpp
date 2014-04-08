@@ -120,7 +120,7 @@ void speedread(UserProperties userp, queue<string> words){
 
 }
 
-void seperate(string in, queue<string> &words){
+void separate(string in, queue<string> &words){
 	
 	char *str = new char[in.length() + 1];
 	strcpy(str, in.c_str());
@@ -157,7 +157,7 @@ int main(){
 
 	getline(cin, user_input);
 	
-	seperate(user_input, words);
+	separate(user_input, words);
 
 
 	int input = 0;
