@@ -12,7 +12,7 @@ using namespace std;
 struct UserProperties{
 
 	string font_size;
-	string chunk_size;
+	int chunk_size;
 	int wpm;
 
 };
@@ -57,7 +57,7 @@ UserProperties readFile(){
 	}
 
 	userp.font_size = arr[0];
-	userp.chunk_size = arr[1];
+	userp.chunk_size = atoi(arr[1].c_str());
 	userp.wpm = atoi(arr[2].c_str());
 
 	ifs.close();
@@ -92,16 +92,22 @@ float getCounter(){
 HANDLE console_handle = GetStdHandle(STD_OUTPUT_HANDLE);
 
 //displays the current word
-void display(UserProperties userp, string word){
+void display(UserProperties userp, queue<string> &words){
 	system("cls");
-	cout << word << endl;
+	for(int i = 0; i < userp.chunk_size; i++){
+		if(!words.empty()){
+			cout << words.front() << " ";
+			words.pop();
+		}
+	}
+	cout << endl;
 }
 
 //starts the speedreading process
-void speedread(UserProperties userp, queue<string> words){
+void speedread(UserProperties userp, queue<string> &words){
 
 	if(!words.empty())
-		display(userp, words.front());
+		display(userp, words);
 
 	//set up the timers
 	float change_time = getCounter();
@@ -110,9 +116,8 @@ void speedread(UserProperties userp, queue<string> words){
 	while(!words.empty()){
 		float time = getCounter();
 		if(time - change_time >= change_interval){
-			words.pop();
 			if(!words.empty()){
-				display(userp, words.front());
+				display(userp, words);
 			}
 			change_time = getCounter();
 		}
@@ -137,6 +142,14 @@ void separate(string in, queue<string> &words){
 
 }
 
+void printMenu(){
+
+	cout << "----------Menu----------\n\n";
+	cout << "1. Speed Read\n";
+	cout << "2. Edit User Preferences\n\n";
+
+}
+
 int main(){
 
 	UserProperties userp = readFile();
@@ -155,24 +168,31 @@ int main(){
 
 	SetCurrentConsoleFontEx(console_handle, true, &console_info);
 
-	getline(cin, user_input);
-	
-	separate(user_input, words);
-
-
 	int input = 0;
+	printMenu();
+	cout << "Please select your choice: ";
+	cin >> input;
+	cout << endl;
+
 	startCounter();
 	while(input != -1){
 	
+		
 		switch(input){
-		case 0:
+		case 1:
+			cin.ignore();
+			getline(cin, user_input);
+			separate(user_input, words);
 			speedread(userp, words);
 			break;
+		case 2:
+			break;
 		default:
-			return 0;
+			break;
 		}
 
-		cout << "Read again?: ";
+		printMenu();
+		cout << "Please select your choice: ";
 		cin >> input;
 		cout << endl;
 	};
