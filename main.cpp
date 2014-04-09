@@ -26,7 +26,7 @@ void createFile(){
 		
 		ofs << "font-size:16\n";
 		ofs << "chunk-size:1\n";
-		ofs << "wpm:400\n";
+		ofs << "wpm:400";
 
 	}
 
@@ -44,7 +44,7 @@ UserProperties readFile(){
 		createFile();
 		ifs.open("user.properties");
 	}
-	
+
 	string line = "";
 	string last = "";
 	getline(ifs, line);
@@ -55,7 +55,7 @@ UserProperties readFile(){
 		last = line;
 		getline(ifs, line);
 	}
-
+	
 	userp.font_size = arr[0];
 	userp.chunk_size = atoi(arr[1].c_str());
 	userp.wpm = atoi(arr[2].c_str());
@@ -142,6 +142,7 @@ void separate(string in, queue<string> &words){
 
 }
 
+//menu for the program
 void printMenu(){
 
 	cout << "----------Menu----------\n\n";
@@ -150,12 +151,51 @@ void printMenu(){
 
 }
 
+//algorithm for editting the program preferences without having to change the file manually
+void editPrefs(UserProperties &userp){
+
+	int chunksize = 0;
+	int wpm = 400;
+
+	ofstream file("user.properties");
+	
+	for(;;){
+		cout << "Please enter a chunk size (that is greater than 0): ";
+		if((cin >> chunksize) && chunksize > 0)
+			break;
+		else{
+			cin.clear();
+			cin.ignore();
+		}
+	}
+
+	for(;;){
+		cout << "Please enter a reading rate in words per minute (that is greater than 0): ";
+		if((cin >> wpm) && wpm > 0)
+			break;
+		else{
+			cin.clear();
+			cin.ignore();
+		}
+	}
+
+	file << "font-size:16\n";
+	file << "chunk-size:" << chunksize << "\n";
+	file << "wpm:" << wpm;
+
+	file.close();
+
+	userp.chunk_size = chunksize;
+	userp.wpm = wpm;
+}
+
 int main(){
 
 	UserProperties userp = readFile();
 	queue<string> words;
 	string user_input;
 
+	//START change console font for easier reading
 	CONSOLE_FONT_INFOEX console_info = {0};
 
 	COORD font = {12, 16};
@@ -167,6 +207,7 @@ int main(){
 	console_info.nFont = 11;
 
 	SetCurrentConsoleFontEx(console_handle, true, &console_info);
+	//END changing font
 
 	int input = 0;
 
@@ -174,8 +215,18 @@ int main(){
 	while(input != -1){
 	
 		printMenu();
-		cout << "Please select your choice: ";
-		cin >> input;
+
+		for(;;){
+			cout << "Please enter select your choice: ";
+			if((cin >> input))
+				break;
+			else{
+				cout << "Error: you must enter a numerical value.";
+				cin.clear();
+				cin.ignore();
+			}
+		}
+		
 		cout << endl;
 		
 		switch(input){
@@ -187,8 +238,12 @@ int main(){
 			cout << endl << endl;
 			break;
 		case 2:
+			editPrefs(userp);
 			break;
 		default:
+			cout << "Error: you did not select a number that was on the menu.\n";
+			cin.ignore();
+			cin.clear();
 			break;
 		}
 
