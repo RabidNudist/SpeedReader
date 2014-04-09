@@ -111,7 +111,7 @@ void speedread(UserProperties userp, queue<string> &words){
 
 	//set up the timers
 	float change_time = getCounter();
-	FLOAT change_interval = 1.0f/userp.wpm * 60.0f;
+	FLOAT change_interval = 1.0f/userp.wpm * 60.0f * userp.chunk_size;
 
 	while(!words.empty()){
 		float time = getCounter();
@@ -151,7 +151,7 @@ void printMenu(){
 
 }
 
-//algorithm for editting the program preferences without having to change the file manually
+//algorithm for editing the program preferences without having to change the file manually
 void editPrefs(UserProperties &userp){
 
 	int chunksize = 0;
@@ -239,6 +239,7 @@ int main(){
 			break;
 		case 2:
 			editPrefs(userp);
+			system("cls");
 			break;
 		default:
 			cout << "Error: you did not select a number that was on the menu.\n";
